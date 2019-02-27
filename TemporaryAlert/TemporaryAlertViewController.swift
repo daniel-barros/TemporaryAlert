@@ -35,7 +35,7 @@ internal class TemporaryAlertViewController: UIViewController {
     var alertView: UIView
     fileprivate var imageLayer: CAShapeLayer?
     fileprivate var animatesImage = false
-
+    
     init(image: TemporaryAlert.AlertImage?, title: String, message: String?) {
         alertView = UIView()
         super.init(nibName: nil, bundle: nil)
@@ -75,18 +75,18 @@ internal class TemporaryAlertViewController: UIViewController {
                        usingSpringWithDamping: 1, initialSpringVelocity: 0,
                        options: .curveEaseOut,
                        animations: {
-                            self.alertView.transform = .identity
-                            self.alertView.alpha = 1
+                        self.alertView.transform = .identity
+                        self.alertView.alpha = 1
         },
                        completion: { _ in
-                            if self.animatesImage {
-                                self.imageLayer?.isHidden = false
-                                let animation = CABasicAnimation(keyPath:"strokeEnd")
-                                animation.duration = 0.2
-                                animation.fromValue = NSNumber(floatLiteral: 0)
-                                animation.toValue = NSNumber(floatLiteral: 1)
-                                self.imageLayer?.add(animation, forKey:"strokeEnd")
-                            }
+                        if self.animatesImage {
+                            self.imageLayer?.isHidden = false
+                            let animation = CABasicAnimation(keyPath:"strokeEnd")
+                            animation.duration = 0.2
+                            animation.fromValue = NSNumber(floatLiteral: 0)
+                            animation.toValue = NSNumber(floatLiteral: 1)
+                            self.imageLayer?.add(animation, forKey:"strokeEnd")
+                        }
         })
     }
     
@@ -96,8 +96,8 @@ internal class TemporaryAlertViewController: UIViewController {
                        usingSpringWithDamping: 1, initialSpringVelocity: 0,
                        options: .curveEaseIn,
                        animations: {
-                            self.alertView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-                            self.alertView.alpha = 0
+                        self.alertView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                        self.alertView.alpha = 0
         },
                        completion: completion)
     }
@@ -257,8 +257,8 @@ fileprivate extension TemporaryAlertViewController {
         layer.strokeColor = Configuration.imageColor.cgColor
         layer.fillColor = nil
         layer.lineWidth = 9
-        layer.lineJoin = kCALineJoinRound
-        layer.lineCap = kCALineCapRound
+        layer.lineJoin = CAShapeLayerLineJoin.round
+        layer.lineCap = CAShapeLayerLineCap.round
         view.layer.addSublayer(layer)
         imageLayer = layer
         return view

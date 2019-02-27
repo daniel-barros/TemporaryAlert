@@ -25,7 +25,7 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
-*/
+ */
 
 
 import UIKit
@@ -84,13 +84,13 @@ public struct TemporaryAlert {
 // MARK: - Helpers
 
 fileprivate extension TemporaryAlert {
-
+    
     static func alertWindow() -> UIWindow {
         let window = UIWindow(frame: UIScreen.main.bounds)
-        window.windowLevel = .greatestFiniteMagnitude
+        window.windowLevel = UIWindow.Level(rawValue: CGFloat.greatestFiniteMagnitude)
         window.backgroundColor = nil
         window.isHidden = false
         window.isUserInteractionEnabled = false
         return window
-    }    
+    }
 }
