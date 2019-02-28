@@ -198,11 +198,11 @@ fileprivate extension TemporaryAlertViewController {
     // MARK: -
     
     private func backgroundView() -> UIVisualEffectView {
-        let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: Configuration.blurStyle))
         view.frame = CGRect(x: 0, y: 0,
                             width: .alertViewWidth,
                             height: .alertViewMinHeight)
-        view.backgroundColor = Configuration.backgroundColor
+        view.backgroundColor = Configuration.blurEnabled ? UIColor.clear : Configuration.backgroundColor
         view.isUserInteractionEnabled = false
         view.layer.cornerRadius = 8
         view.layer.masksToBounds = true
@@ -215,7 +215,7 @@ fileprivate extension TemporaryAlertViewController {
         let label = UILabel()
         label.text = title
         label.font = Configuration.titleFont
-        label.textColor = Configuration.titleColor
+        label.textColor = getColor(Configuration.titleColor)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -226,7 +226,7 @@ fileprivate extension TemporaryAlertViewController {
         let label = UILabel()
         label.text = message
         label.font = Configuration.messageFont
-        label.textColor = Configuration.messageColor
+        label.textColor = getColor(Configuration.messageColor)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -254,16 +254,28 @@ fileprivate extension TemporaryAlertViewController {
         let layer = CAShapeLayer()
         layer.path = path.cgPath
         layer.position = position
-        layer.strokeColor = Configuration.imageColor.cgColor
+        layer.strokeColor = getColor(Configuration.imageColor)?.cgColor
+        //layer.strokeColor = Configuration.imageColor.cgColor
         layer.fillColor = nil
         layer.lineWidth = 9
-        layer.lineJoin = kCALineJoinRound
-        layer.lineCap = kCALineCapRound
+        layer.lineJoin = CAShapeLayerLineJoin.round
+        layer.lineCap = CAShapeLayerLineCap.round
         view.layer.addSublayer(layer)
         imageLayer = layer
         return view
     }
     
+    private func getColor<T>(_ color: T) -> UIColor? {
+        if let colors = color as? [UIColor], colors.count == 2 {
+            if Configuration.blurEnabled {
+                return Configuration.blurStyle == .light ? colors[0] : colors[1]
+            }
+            return colors[0]
+        }
+        else {
+            return color as? UIColor
+        }
+    }
     
     private func checkmarkPath(with size: CGSize) -> UIBezierPath {
         let path = UIBezierPath()
