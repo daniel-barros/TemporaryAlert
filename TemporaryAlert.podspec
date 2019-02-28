@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TemporaryAlert"
-  s.version      = "1.1.0"
+  s.version      = "1.2.0"
   s.summary      = "Temporary alerts similar to those in Apple's Music app."
   s.homepage     = "https://github.com/daniel-barros/TemporaryAlert"
   s.license      = { :type => "MIT", :file => "LICENSE.md" }

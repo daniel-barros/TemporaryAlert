@@ -35,7 +35,7 @@ internal class TemporaryAlertViewController: UIViewController {
     var alertView: UIView
     fileprivate var imageLayer: CAShapeLayer?
     fileprivate var animatesImage = false
-    
+
     init(image: TemporaryAlert.AlertImage?, title: String, message: String?) {
         alertView = UIView()
         super.init(nibName: nil, bundle: nil)
@@ -75,18 +75,18 @@ internal class TemporaryAlertViewController: UIViewController {
                        usingSpringWithDamping: 1, initialSpringVelocity: 0,
                        options: .curveEaseOut,
                        animations: {
-                        self.alertView.transform = .identity
-                        self.alertView.alpha = 1
+                            self.alertView.transform = .identity
+                            self.alertView.alpha = 1
         },
                        completion: { _ in
-                        if self.animatesImage {
-                            self.imageLayer?.isHidden = false
-                            let animation = CABasicAnimation(keyPath:"strokeEnd")
-                            animation.duration = 0.2
-                            animation.fromValue = NSNumber(floatLiteral: 0)
-                            animation.toValue = NSNumber(floatLiteral: 1)
-                            self.imageLayer?.add(animation, forKey:"strokeEnd")
-                        }
+                            if self.animatesImage {
+                                self.imageLayer?.isHidden = false
+                                let animation = CABasicAnimation(keyPath:"strokeEnd")
+                                animation.duration = 0.2
+                                animation.fromValue = NSNumber(floatLiteral: 0)
+                                animation.toValue = NSNumber(floatLiteral: 1)
+                                self.imageLayer?.add(animation, forKey:"strokeEnd")
+                            }
         })
     }
     
@@ -96,8 +96,8 @@ internal class TemporaryAlertViewController: UIViewController {
                        usingSpringWithDamping: 1, initialSpringVelocity: 0,
                        options: .curveEaseIn,
                        animations: {
-                        self.alertView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-                        self.alertView.alpha = 0
+                            self.alertView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                            self.alertView.alpha = 0
         },
                        completion: completion)
     }
@@ -198,11 +198,11 @@ fileprivate extension TemporaryAlertViewController {
     // MARK: -
     
     private func backgroundView() -> UIVisualEffectView {
-        let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: Configuration.blurStyle))
         view.frame = CGRect(x: 0, y: 0,
                             width: .alertViewWidth,
                             height: .alertViewMinHeight)
-        view.backgroundColor = Configuration.backgroundColor
+        view.backgroundColor = Configuration.blurEnabled ? UIColor.clear : Configuration.backgroundColor
         view.isUserInteractionEnabled = false
         view.layer.cornerRadius = 8
         view.layer.masksToBounds = true
@@ -215,7 +215,7 @@ fileprivate extension TemporaryAlertViewController {
         let label = UILabel()
         label.text = title
         label.font = Configuration.titleFont
-        label.textColor = Configuration.titleColor
+        label.textColor = getColor(Configuration.titleColor)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -226,7 +226,7 @@ fileprivate extension TemporaryAlertViewController {
         let label = UILabel()
         label.text = message
         label.font = Configuration.messageFont
-        label.textColor = Configuration.messageColor
+        label.textColor = getColor(Configuration.messageColor)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -254,7 +254,8 @@ fileprivate extension TemporaryAlertViewController {
         let layer = CAShapeLayer()
         layer.path = path.cgPath
         layer.position = position
-        layer.strokeColor = Configuration.imageColor.cgColor
+        layer.strokeColor = getColor(Configuration.imageColor)?.cgColor
+        //layer.strokeColor = Configuration.imageColor.cgColor
         layer.fillColor = nil
         layer.lineWidth = 9
         layer.lineJoin = CAShapeLayerLineJoin.round
@@ -264,6 +265,17 @@ fileprivate extension TemporaryAlertViewController {
         return view
     }
     
+    private func getColor<T>(_ color: T) -> UIColor? {
+        if let colors = color as? [UIColor], colors.count == 2 {
+            if Configuration.blurEnabled {
+                return Configuration.blurStyle == .light ? colors[0] : colors[1]
+            }
+            return colors[0]
+        }
+        else {
+            return color as? UIColor
+        }
+    }
     
     private func checkmarkPath(with size: CGSize) -> UIBezierPath {
         let path = UIBezierPath()

@@ -25,7 +25,7 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
- */
+*/
 
 
 import UIKit
@@ -38,15 +38,18 @@ public struct TemporaryAlert {
     public enum AlertImage {
         case checkmark, cross, custom(UIView)
     }
-    
+
     public enum Configuration {
         /// The color used to draw the default alert images. This does not apply if you provide a custom image.
         ///
         /// By default this is the same as `titleColor`.
-        public static var imageColor = #colorLiteral(red: 0.3450980392, green: 0.3450980392, blue: 0.3450980392, alpha: 1)
+        
+        public static var imageColor:Any? = [UIColor.darkGray, UIColor.lightGray]
         public static var backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 0.8)
-        public static var titleColor = #colorLiteral(red: 0.3450980392, green: 0.3450980392, blue: 0.3450980392, alpha: 1)
-        public static var messageColor = #colorLiteral(red: 0.6274509804, green: 0.6274509804, blue: 0.6274509804, alpha: 1)
+        public static var blurEnabled = true
+        public static var blurStyle: UIBlurEffect.Style = .light
+        public static var titleColor:Any? = [UIColor.darkGray, UIColor.lightGray]
+        public static var messageColor:Any? = [UIColor.lightGray, UIColor.lightText]
         public static var titleFont = UIFont.systemFont(ofSize: 22, weight: .semibold)
         public static var messageFont = UIFont.systemFont(ofSize: 16, weight: .semibold)
         /// The number of seconds alerts are visible.
@@ -60,6 +63,7 @@ public struct TemporaryAlert {
     // An independent window makes sure the alert is shown above everything else.
     fileprivate static var window: UIWindow?
     
+
     /// Shows an alert with the specified image, title and message.
     ///
     /// If you want to change the alert life span or customize the alert appearance use the variables in `TemporaryAlert.Configuration`.
@@ -84,7 +88,7 @@ public struct TemporaryAlert {
 // MARK: - Helpers
 
 fileprivate extension TemporaryAlert {
-    
+
     static func alertWindow() -> UIWindow {
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.windowLevel = UIWindow.Level(rawValue: CGFloat.greatestFiniteMagnitude)
@@ -92,5 +96,5 @@ fileprivate extension TemporaryAlert {
         window.isHidden = false
         window.isUserInteractionEnabled = false
         return window
-    }
+    }    
 }
